@@ -3,7 +3,7 @@
 
 # Datos
 pandas==2.2.2
-numpy==1.26.4
+numpy==2.3.5
 
 # Visualización
 matplotlib==3.8.4
