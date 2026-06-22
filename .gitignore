@@ -1,0 +1,37 @@
+# ── Datos crudos y geodatos (no usados en producción) ──
+data/raw/
+geo/
+data/geo/
+
+# ── Notebooks, scripts y figuras del proceso de tesis (no parte del dashboard) ──
+*.ipynb
+.ipynb_checkpoints/
+SaberPro1.R
+figures/
+reports/
+/tables/
+Modelos/
+app_estetico.py
+
+# ── Sobras sueltas en la raíz (CSVs/PNGs viejos, ya no usados) ──
+/*.csv
+/*.png
+
+# ── Entorno y caché de Python ──
+__pycache__/
+*.pyc
+*.egg-info/
+
+# ── Entorno conda/venv ──
+venv/
+env/
+.venv/
+
+# ── Variables de entorno y secretos ──
+.env
+.env.local
+
+# ── Sistema macOS / editor ──
+.DS_Store
+.vscode/
+.idea/

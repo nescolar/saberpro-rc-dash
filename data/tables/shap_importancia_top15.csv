@@ -1,0 +1,16 @@
+feature,label,importancia,efecto_dir
+estu_genero_M,Género (Masculino),0.04331759186918028,0.0014316507244803648
+edad,Edad,0.0313992204971891,0.00026058535421210076
+estu_valormatriculauniversidad_Más de 7 millones,Matrícula > $7M,0.030255530206007297,0.0013245052429380802
+inst_origen_NO OFICIAL - FUNDACIÓN,Inst. no oficial – Fundación,0.023379532176260126,-0.0006740191883343331
+estu_pagomatricula_Becas o Subsidios,Pago matrícula: Beca/Subsidio,0.02136663732536297,0.0016058091526120805
+inst_caracter_academico_UNIVERSIDAD,Carácter: Universidad,0.014774189171497448,-0.0005254803091959334
+inst_origen_OFICIAL DEPARTAMENTAL,Inst. oficial departamental,0.01430786245979893,0.001665028664069955
+estu_valormatriculauniversidad_Entre 2.5 millones y menos de 4 millones,Matrícula $2.5M–$4M,0.012763684611808448,0.00030497766795569006
+fami_educacionmadre,Nivel educativo madre,0.012104774397524495,-0.00030405833254612053
+estu_horassemanatrabaja_Más de 30 horas,Trabaja > 30 h/semana,0.011444223612380112,5.275074110609833e-05
+fami_educacionpadre,Nivel educativo padre,0.009696120011779165,-0.0002443518539081374
+inst_caracter_academico_INSTITUCIÓN UNIVERSITARIA,Carácter: Inst. Universitaria,0.006456391003256961,-0.0002785953654521084
+estu_valormatriculauniversidad_Entre 4 millones y menos de 5.5 millones,Matrícula $4M–$5.5M,0.0062533245612510675,-6.872500690659992e-05
+estu_pagomatricula_Creditos,estu_pagomatricula_Creditos,0.005297855311422682,-0.00027164460826360385
+fami_estratovivienda,Estrato socioeconómico,0.005127011778796203,-0.00023330571783078134
