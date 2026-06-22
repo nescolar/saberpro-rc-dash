@@ -3886,6 +3886,10 @@ app = Dash(__name__,
            suppress_callback_exceptions=True)
 app.title = "Saber Pro · Atlántico 2023"
 
+# Objeto Flask interno — requerido por gunicorn en producción (Render).
+# gunicorn no soporta atributos con punto (app:app.server), solo nombres
+# simples, por eso se expone como variable independiente.
+server = app.server
 
 def formula(latex_str):
     """Renderiza una fórmula LaTeX como imagen PNG usando matplotlib."""
