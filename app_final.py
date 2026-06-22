@@ -1823,7 +1823,7 @@ def layout_intro_intro():
             "El objetivo es predecir el desempeño y clasificar a los estudiantes en ",
             html.Strong("alto (0) y bajo (1) desempeño", style={"color": CORAL}),
             ", a partir de datos de 13.078 estudiantes del departamento del Atlántico "
-            "que presentaron la prueba en 2023 (fuente: ICFES).",
+            "que presentaron la prueba en 2023.",
         ], style={"fontFamily": FONT, "fontSize": "0.95rem", "color": GRIS_TEXTO,
                   "lineHeight": "1.8"}),
     ], style={"flex": "1.1", "paddingRight": "3rem"})
@@ -1831,8 +1831,8 @@ def layout_intro_intro():
     # columna derecha: línea vertical con nodos
     col_der = html.Div([
         # nodo 1
-        nodo(PETROL, "Marco Teórico",
-             "Literatura relacionada con EDM y sustento matemático de técnicas y métodos implementados."),
+        nodo(CORAL, "Metodología",
+             "Operacionalización de las variables. Arquitectura de los modelos y técnicas de validación, e interpretación."),
         # línea vertical entre nodos
         html.Div(style={
             "width": "3px", "height": "3rem",
@@ -1840,8 +1840,8 @@ def layout_intro_intro():
             "margin": "0 0 0 24px",
         }),
         # nodo 2
-        nodo(CORAL, "Metodología",
-             "Operacionalización de las variables. Arquitectura de los modelos y técnicas de validación, e interpretación."),
+        nodo(PETROL, "Marco Teórico",
+             "Literatura relacionada con EDM y sustento matemático de técnicas y métodos implementados."),
         # línea vertical entre nodos
         html.Div(style={
             "width": "3px", "height": "3rem",
