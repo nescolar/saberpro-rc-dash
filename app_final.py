@@ -3751,19 +3751,8 @@ def layout_prediccion():
 
     resultado = html.Div(id="resultado-prediccion", style={"marginTop": "1rem"})
 
-    nota_modelo = html.Div([
-        html.Span(style={"fontSize": "1rem"}),
-        html.Span(f"Este panel utiliza el modelo {MODELO_GANADOR} (Recall = 0,803, AUC = 0,728 en test set). ",
-                  style={"fontFamily": FONT, "fontSize": "0.83rem", "color": GRIS_TEXTO}),
-        html.Span("Si el modelo no está serializado, se mostrará un mensaje informativo.",
-                  style={"fontFamily": FONT, "fontSize": "0.83rem", "color": GRIS_MUTED}),
-    ], style={"background": AZUL_CLARO, "borderRadius": "10px",
-              "padding": "0.7rem 1rem", "marginBottom": "1.2rem",
-              "border": f"1px solid {BORDE}"})
-
     return html.Div([
         card([
-            nota_modelo,
             panel_inputs,
             boton,
             resultado,
@@ -4429,12 +4418,22 @@ def procesar_consulta_chatbot(n_clicks, n_submit, consulta_usuario, historial):
     historial.append({"role": "user", "text": consulta_usuario})
 
     contexto_institucional = (
-        "Eres un consultor analítico de la Universidad del Norte experto en el examen "
+        "Eres un consultor analítico de una institución Universitaria experto en el examen "
         "Saber Pro 2023, módulo de Razonamiento Cuantitativo en el departamento del "
-        "Atlántico. Ayudas a interpretar el modelo Random Forest ganador (Recall clase 1 "
-        "= 0,803, AUC = 0,728), las variables de mayor importancia (género, valor de "
+        "Atlántico. Conoces los seis modelos comparados en el estudio (Random Forest, "
+        "XGBoost, Regresión Logística, Ridge, Lasso y KNN), todos los cuales presentan "
+        "un desempeño predictivo razonable y comparable en términos generales. Random "
+        "Forest fue seleccionado como modelo final específicamente por tener el mayor "
+        "Recall en la clase de bajo desempeño (0,803), el criterio priorizado en el "
+        "estudio para minimizar falsos negativos al identificar estudiantes en riesgo; "
+        "esto no implica que los demás modelos clasifiquen mal, sino que Random Forest "
+        "los supera en esa métrica específica. Si te preguntan qué modelo sirve para "
+        "clasificar o cuál es mejor, evita afirmar que solo uno funciona: explica que "
+        "todos los modelos comparados clasifican razonablemente bien, y que Random "
+        "Forest se prefiere por su Recall superior dado el objetivo del estudio. "
+        "También conoces las variables de mayor importancia (género, valor de "
         "matrícula, edad, origen institucional) y los hallazgos generales del estudio. "
-        "Responde en español, de forma clara y concisa."
+        "Responde en español, de forma clara, precisa y sin generalizaciones excesivas."
     )
 
     try:
