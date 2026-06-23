@@ -3838,7 +3838,7 @@ LIMITACIONES_ANALISIS = [
     "El análisis se restringe al departamento del Atlántico (2023), por lo que los resultados no son generalizables directamente a otros contextos.",
 ]
 RECOMENDACIONES_POLITICA = [
-    "Priorizar municipios del interior del Atlántico con alto porcentaje de bajo desempeño para intervenciones de política educativa.",
+    "Priorizar intervenciones de política educativa en los municipios con mayor porcentaje de bajo desempeño: Luruaco (92,3%), Ponedera (78%), Juan de Acosta (77,4%), Campo de la Cruz (73,5%) y Sabanalarga (69%).",
     "Incorporar variables cognitivas previas (puntaje ICFES bachillerato) en futuras versiones del modelo para mejorar la capacidad predictiva.",
     "Implementar el modelo Random Forest como herramienta de diagnóstico temprano en instituciones de educación superior del Atlántico.",
     "Explorar modelos de stacking combinando Random Forest y XGBoost para superar el umbral de AUC = 0,80.",
