@@ -3821,26 +3821,35 @@ def layout_chatbot_analitico():
     ], style={"padding": "2rem", "backgroundColor": GRIS_SUAVE, "minHeight": "100vh"})
 
 
+# ── Conclusiones del estudio ──────────────────────────────────────
+# Definidas a nivel de módulo (no solo dentro de layout_conclusiones) para
+# que el Asistente IA pueda incluirlas en su contexto y mantenerse
+# sincronizado automáticamente con la pestaña de Conclusiones.
+HALLAZGOS_PRINCIPALES = [
+    "Random Forest obtuvo el mayor Recall en la clase de bajo desempeño (0,803) en el conjunto de test, criterio principal de selección del modelo ganador, con superioridad estadística confirmada por el test de Wilcoxon pareado (W = 0, p = 0,002).",
+    "Los modelos lineales (Logística, Ridge, Lasso) son prácticamente equivalentes entre sí, indicando que la regularización no aporta valor adicional significativo en este conjunto de datos.",
+    "KNN es el modelo con menor desempeño en todas las métricas y mayor inestabilidad en validación cruzada.",
+    "El género masculino, la edad, el valor de matrícula y el origen institucional son los predictores de mayor importancia según el análisis SHAP sobre Random Forest.",
+    "XGBoost obtiene el AUC más alto (0,736) y la mayor Average Precision (0,747), pero su Recall (0,698) es inferior al de Random Forest, lo que lo excluye como ganador bajo el criterio de minimización de falsos negativos.",
+]
+LIMITACIONES_ANALISIS = [
+    "La variable dependiente se construye con el promedio nacional como umbral, lo que puede clasificar diferente a estudiantes con puntajes similares cerca del corte.",
+    "No se dispone de variables cognitivas previas (ICFES bachillerato) ni de calidad instruccional, lo que limita el poder predictivo.",
+    "El análisis se restringe al departamento del Atlántico (2023), por lo que los resultados no son generalizables directamente a otros contextos.",
+]
+RECOMENDACIONES_POLITICA = [
+    "Priorizar municipios del interior del Atlántico con alto porcentaje de bajo desempeño para intervenciones de política educativa.",
+    "Incorporar variables cognitivas previas (puntaje ICFES bachillerato) en futuras versiones del modelo para mejorar la capacidad predictiva.",
+    "Implementar el modelo Random Forest como herramienta de diagnóstico temprano en instituciones de educación superior del Atlántico.",
+    "Explorar modelos de stacking combinando Random Forest y XGBoost para superar el umbral de AUC = 0,80.",
+    "Extender el análisis a otras competencias genéricas Saber Pro y a otros departamentos de Colombia.",
+]
+
+
 def layout_conclusiones():
-    hallazgos = [
-        "Random Forest obtuvo el mayor Recall en la clase de bajo desempeño (0,803) en el conjunto de test, criterio principal de selección del modelo ganador, con superioridad estadística confirmada por el test de Wilcoxon pareado (W = 0, p = 0,002).",
-        "Los modelos lineales (Logística, Ridge, Lasso) son prácticamente equivalentes entre sí, indicando que la regularización no aporta valor adicional significativo en este conjunto de datos.",
-        "KNN es el modelo con menor desempeño en todas las métricas y mayor inestabilidad en validación cruzada.",
-        "El género masculino, la edad, el valor de matrícula y el origen institucional son los predictores de mayor importancia según el análisis SHAP sobre Random Forest.",
-        "XGBoost obtiene el AUC más alto (0,736) y la mayor Average Precision (0,747), pero su Recall (0,698) es inferior al de Random Forest, lo que lo excluye como ganador bajo el criterio de minimización de falsos negativos.",
-    ]
-    limitaciones = [
-        "La variable dependiente se construye con el promedio nacional como umbral, lo que puede clasificar diferente a estudiantes con puntajes similares cerca del corte.",
-        "No se dispone de variables cognitivas previas (ICFES bachillerato) ni de calidad instruccional, lo que limita el poder predictivo.",
-        "El análisis se restringe al departamento del Atlántico (2023), por lo que los resultados no son generalizables directamente a otros contextos.",
-    ]
-    recomendaciones = [
-        "Priorizar municipios del interior del Atlántico con alto porcentaje de bajo desempeño para intervenciones de política educativa.",
-        "Incorporar variables cognitivas previas (puntaje ICFES bachillerato) en futuras versiones del modelo para mejorar la capacidad predictiva.",
-        "Implementar el modelo Random Forest como herramienta de diagnóstico temprano en instituciones de educación superior del Atlántico.",
-        "Explorar modelos de stacking combinando Random Forest y XGBoost para superar el umbral de AUC = 0,80.",
-        "Extender el análisis a otras competencias genéricas Saber Pro y a otros departamentos de Colombia.",
-    ]
+    hallazgos = HALLAZGOS_PRINCIPALES
+    limitaciones = LIMITACIONES_ANALISIS
+    recomendaciones = RECOMENDACIONES_POLITICA
 
     def seccion(titulo, items, color_borde):
         return html.Div([
@@ -4417,8 +4426,12 @@ def procesar_consulta_chatbot(n_clicks, n_submit, consulta_usuario, historial):
 
     historial.append({"role": "user", "text": consulta_usuario})
 
+    hallazgos_txt = "\n".join(f"- {h}" for h in HALLAZGOS_PRINCIPALES)
+    limitaciones_txt = "\n".join(f"- {l}" for l in LIMITACIONES_ANALISIS)
+    recomendaciones_txt = "\n".join(f"- {r}" for r in RECOMENDACIONES_POLITICA)
+
     contexto_institucional = (
-        "Eres un consultor analítico de una institución Universitaria experto en el examen "
+        "Eres un consultor analítico de la Universidad del Norte experto en el examen "
         "Saber Pro 2023, módulo de Razonamiento Cuantitativo en el departamento del "
         "Atlántico. Conoces los seis modelos comparados en el estudio (Random Forest, "
         "XGBoost, Regresión Logística, Ridge, Lasso y KNN), todos los cuales presentan "
@@ -4430,9 +4443,16 @@ def procesar_consulta_chatbot(n_clicks, n_submit, consulta_usuario, historial):
         "los supera en esa métrica específica. Si te preguntan qué modelo sirve para "
         "clasificar o cuál es mejor, evita afirmar que solo uno funciona: explica que "
         "todos los modelos comparados clasifican razonablemente bien, y que Random "
-        "Forest se prefiere por su Recall superior dado el objetivo del estudio. "
-        "También conoces las variables de mayor importancia (género, valor de "
-        "matrícula, edad, origen institucional) y los hallazgos generales del estudio. "
+        "Forest se prefiere por su Recall superior dado el objetivo del estudio.\n\n"
+        "Estos son los hallazgos principales del estudio:\n"
+        f"{hallazgos_txt}\n\n"
+        "Estas son las limitaciones del análisis:\n"
+        f"{limitaciones_txt}\n\n"
+        "Estas son las recomendaciones de política educativa derivadas del estudio:\n"
+        f"{recomendaciones_txt}\n\n"
+        "Usa esta información para responder con precisión y matices cuando te pregunten "
+        "sobre los resultados, las limitaciones o las recomendaciones del estudio. No "
+        "inventes cifras ni conclusiones que no estén respaldadas por este contexto. "
         "Responde en español, de forma clara, precisa y sin generalizaciones excesivas."
     )
 
