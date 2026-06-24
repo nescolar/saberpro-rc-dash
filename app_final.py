@@ -164,7 +164,6 @@ SECCIONES = [
     ("eda",           "EDA"),
     ("modelos",       "Modelos y Resultados"),
     ("prediccion",    "Predictor Interactivo"),
-    ("chatbot",       "+PRO"),
     ("conclusiones",  "Conclusiones"),
 ]
 
@@ -3762,6 +3761,9 @@ def layout_prediccion():
 
 
 # ── Asistente IA analítico (chatbot con Gemini) ───────────────
+# Nota: la vista del chat ya no es una pestaña independiente; vive como
+# widget flotante (+Pro) definido directamente en app.layout, visible
+# en cualquier sección del dashboard.
 def construir_burbujas_chat(historial):
     """Genera bloques de HTML estilizados simulando una conversación fluida."""
     burbujas = []
@@ -3782,43 +3784,6 @@ def construir_burbujas_chat(historial):
             })
         ], style={"display": "flex", "justifyContent": alineacion, "width": "100%"}))
     return burbujas
-
-
-def layout_chatbot_analitico():
-    """Vista de la pestaña del Asistente IA analítico."""
-    aviso_sin_key = None
-    if client_genai is None:
-        aviso_sin_key = html.P(
-            "El asistente no pudo inicializarse. Verifica que la variable de entorno "
-            "GEMINI_API_KEY esté configurada en la terminal antes de ejecutar el dashboard.",
-            style={"fontFamily": FONT, "fontSize": "0.82rem", "color": ACENTO_ROJO,
-                   "marginBottom": "1rem"})
-
-    contenido_card = [
-        html.Div(id="chat-history-container", style={
-            "height": "450px", "overflowY": "auto",
-            "padding": "1.2rem", "backgroundColor": GRIS_SUAVE,
-            "borderRadius": "14px", "border": f"1px solid {BORDE}",
-            "display": "flex", "flexDirection": "column", "gap": "12px",
-            "marginBottom": "1rem",
-        }),
-        dbc.InputGroup([
-            dbc.Input(id="chat-user-input", placeholder="Ej: Explícame el impacto del estrato socioeconómico...",
-                       type="text", style={"fontFamily": FONT}),
-            dbc.Button("Consultar", id="chat-send-btn", color="primary",
-                       style={"fontWeight": "600", "backgroundColor": AZUL_OSCURO,
-                              "border": "none"}),
-        ]),
-    ]
-    if aviso_sin_key:
-        contenido_card.insert(0, aviso_sin_key)
-
-    return html.Div([
-        card(contenido_card,
-             titulo="Asistente IA +Pro",
-             subtitulo="Realiza consultas sobre las variables, los modelos,"
-                       "la metodología y los hallazgos del estudio."),
-    ], style={"padding": "2rem", "backgroundColor": GRIS_SUAVE, "minHeight": "100vh"})
 
 
 # ── Conclusiones del estudio ──────────────────────────────────────
@@ -3934,9 +3899,57 @@ app.layout = html.Div([
     dcc.Store(id="store-metodologia-sub", data="met_marco"),
     dcc.Store(id="store-modelo-sel", data=MODELO_GANADOR),
     dcc.Store(id="chat-memory-store", data=[]),
+    dcc.Store(id="chat-widget-open", data=False),
     html.Div(id="navbar-container"),
     html.Div(id="subnav-container"),
     html.Div(id="page-content"),
+
+    # ── Widget flotante del Asistente IA (+PRO) ───────────────
+    # Visible en cualquier pestaña del dashboard. Reutiliza los mismos
+    # IDs de chat-history-container / chat-user-input / chat-send-btn
+    # que ya usa procesar_consulta_chatbot, así que el callback lógico
+    # no necesita ningún cambio.
+    html.Div(id="chat-widget-panel", children=[
+        html.Div([
+            html.Span("Asistente IA +Pro", style={
+                "fontFamily": FONT, "fontWeight": "700", "color": BLANCO,
+                "fontSize": "0.95rem"}),
+            html.Button("×", id="chat-widget-close-btn", n_clicks=0, style={
+                "background": "none", "border": "none", "color": BLANCO,
+                "fontSize": "1.3rem", "cursor": "pointer", "lineHeight": 1,
+                "padding": "0 0.3rem"}),
+        ], style={"display": "flex", "justifyContent": "space-between",
+                  "alignItems": "center", "backgroundColor": AZUL_OSCURO,
+                  "padding": "0.9rem 1.1rem", "borderRadius": "16px 16px 0 0"}),
+        html.Div(id="chat-history-container", style={
+            "height": "360px", "overflowY": "auto",
+            "padding": "1rem", "backgroundColor": GRIS_SUAVE,
+            "display": "flex", "flexDirection": "column", "gap": "10px",
+        }),
+        html.Div(
+            dbc.InputGroup([
+                dbc.Input(id="chat-user-input",
+                          placeholder="Escribe tu pregunta...",
+                          type="text", style={"fontFamily": FONT, "fontSize": "0.85rem"}),
+                dbc.Button("➤", id="chat-send-btn", color="primary", style={
+                    "backgroundColor": AZUL_OSCURO, "border": "none"}),
+            ]),
+            style={"padding": "0.8rem", "backgroundColor": BLANCO,
+                   "borderRadius": "0 0 16px 16px"}),
+    ], style={
+        "position": "fixed", "bottom": "5.5rem", "right": "1.5rem",
+        "width": "350px", "backgroundColor": BLANCO, "borderRadius": "16px",
+        "boxShadow": "0 8px 30px rgba(2,51,115,0.25)", "zIndex": 999,
+        "display": "none", "border": f"1px solid {BORDE}",
+    }),
+
+    html.Button("💬", id="chat-widget-toggle-btn", n_clicks=0, style={
+        "position": "fixed", "bottom": "1.8rem", "right": "1.8rem",
+        "width": "58px", "height": "58px", "borderRadius": "50%",
+        "backgroundColor": AZUL_OSCURO, "color": BLANCO, "border": "none",
+        "fontSize": "1.5rem", "cursor": "pointer", "zIndex": 1000,
+        "boxShadow": "0 4px 18px rgba(2,51,115,0.4)",
+    }),
 ], style={"fontFamily": FONT, "backgroundColor": GRIS_SUAVE, "color": GRIS_TEXTO})
 
 
@@ -4096,7 +4109,6 @@ def render_content(seccion, eda_sub, modelos_sub, intro_sub, marco_sub, met_sub)
     if seccion == "marco":        return layout_marco()
     if seccion == "metodologia":  return layout_metodologia()
     if seccion == "prediccion":   return layout_prediccion()
-    if seccion == "chatbot":      return layout_chatbot_analitico()
     if seccion == "conclusiones": return layout_conclusiones()
     if seccion == "eda":
         contenido = {
@@ -4398,6 +4410,25 @@ def predecir(*args):
               "backgroundColor": "#fafbfe"})
 
     return resultado_card
+
+
+# ── Toggle del widget flotante del Asistente IA ───────────────
+@app.callback(
+    Output("chat-widget-panel", "style"),
+    Output("chat-widget-open", "data"),
+    Input("chat-widget-toggle-btn", "n_clicks"),
+    Input("chat-widget-close-btn", "n_clicks"),
+    State("chat-widget-open", "data"),
+    State("chat-widget-panel", "style"),
+    prevent_initial_call=True,
+)
+def toggle_chat_widget(n_toggle, n_close, abierto, estilo_actual):
+    trigger = ctx.triggered_id
+    nuevo_estado = False if trigger == "chat-widget-close-btn" else not abierto
+    estilo = dict(estilo_actual)
+    estilo["display"] = "flex" if nuevo_estado else "none"
+    estilo["flexDirection"] = "column"
+    return estilo, nuevo_estado
 
 
 # ── Callback lógico del Asistente IA (chatbot con Gemini) ────
