@@ -4493,8 +4493,8 @@ def procesar_consulta_chatbot(n_clicks, n_submit, consulta_usuario, historial):
             contents_payload.append(
                 types.Content(role=entrada["role"], parts=[types.Part.from_text(text=entrada["text"])])
             )
-            
-        # Intento 1: Con el modelo Flash estándar
+
+        # Intento 1: modelo Flash estándar (cuota gratuita: 10 RPM / 250 por día)
         try:
             response = client_genai.models.generate_content(
                 model='gemini-2.5-flash',
@@ -4502,20 +4502,28 @@ def procesar_consulta_chatbot(n_clicks, n_submit, consulta_usuario, historial):
                 config=types.GenerateContentConfig(system_instruction=contexto_institucional, temperature=0.35)
             )
         except Exception as e_flash:
-            # Plan de Respaldo: Si Flash está saturado (503), intentamos con Gemini 2.5 Pro
-            if "503" in str(e_flash) or "UNAVAILABLE" in str(e_flash).upper():
+            # Plan de respaldo: si Flash está saturado (503) o sin cuota (429),
+            # reintentamos con Flash-Lite, que tiene una cuota gratuita más
+            # amplia (15 RPM / 1.000 por día). Gemini Pro ya no está disponible
+            # en el tier gratuito desde abril de 2026, así que no se usa aquí.
+            if any(code in str(e_flash) for code in ("503", "429", "UNAVAILABLE", "RESOURCE_EXHAUSTED")):
                 response = client_genai.models.generate_content(
-                    model='gemini-2.5-pro',  # <-- Modelo de respaldo de alta capacidad
+                    model='gemini-2.5-flash-lite',
                     contents=contents_payload,
                     config=types.GenerateContentConfig(system_instruction=contexto_institucional, temperature=0.35)
                 )
             else:
-                raise e_flash  # Si es otro tipo de error, lo mandamos al except general
-        
+                raise e_flash
+
         historial.append({"role": "model", "text": response.text})
-        
+
     except Exception as e:
-        historial.append({"role": "model", "text": f"Inconveniente con Gemini: {str(e)}"})
+        if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+            mensaje_error = ("El asistente alcanzó su límite de consultas gratuitas por ahora. "
+                              "Intenta de nuevo en un par de minutos.")
+        else:
+            mensaje_error = f"Inconveniente al consultar el asistente: {e}"
+        historial.append({"role": "model", "text": mensaje_error})
 
     return construir_burbujas_chat(historial), historial, ""
 
