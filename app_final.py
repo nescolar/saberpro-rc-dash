@@ -3379,6 +3379,7 @@ def layout_met_flujo():
                               "Tratamiento de los datos depurados"), [
             (C1b, caja_derecha("Partición 80% (train) — 20% (test) estratificada", C1b)),
             (C1b, caja_derecha("Imputación de valores faltantes (MICE/Moda), codificación (Encoding) y escalado", C1b)),
+            (C1b, caja_derecha("Semilla aleatoria fija (random_state = 42) en todas las etapas del preprocesamiento, para garantizar la reproducibilidad de la partición y de los modelos", C1b)),
         ]),
     ])
 
