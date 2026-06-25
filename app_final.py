@@ -2304,15 +2304,17 @@ def layout_intro_metricas():
     ]
 
     VALIDACION_DEF = [
-        ("VALIDACIÓN CRUZADA (K = 10)", MENTA,
-         "El desempeño promedio en los 10 pliegues reduce la varianza asociada a una "
-         "única partición aleatoria. Garantiza que la proporción de clases se preserve "
-         "en cada pliegue.",
-         r"\bar{M} = \frac{1}{k} \sum_{i=1}^{k} M_i"),
+        ("VALORES SHAP", MENTA,
+         "Distribuyen equitativamente la contribución de cada variable predictora "
+         "considerando todas las combinaciones posibles, con base en la teoría de "
+         "juegos cooperativos de Shapley. Implementado con TreeExplainer sobre "
+         "1.000 observaciones del conjunto de prueba para el modelo ganador.",
+         r"f(\mathbf{x}) = E[f(\mathbf{x})] + \sum_{j=1}^{p} \phi_j"),
         ("TEST DE WILCOXON PAREADO", AMARILLO,
          "Prueba no paramétrica para comparar dos modelos cuando no puede asumirse "
-         "normalidad en las diferencias. Aplicado sobre los 10 pares de Recall₁ en "
-         "validación cruzada. Random Forest superior a Ridge (p = 0,002).",
+         "normalidad en las diferencias. Aplicado sobre los 10 pares de Recall₁ "
+         "obtenidos en validación cruzada estratificada (k = 10). Random Forest "
+         "superior a Ridge (p = 0,002).",
          r"W = \sum_{i:\,d_i > 0} r_i"),
         ("BOOTSTRAP — IC 95%", CORAL,
          "Método del percentil sobre B = 1.000 remuestras con reemplazo del conjunto "
@@ -2574,15 +2576,17 @@ def layout_marco():
          "Proporción global de clasificaciones correctas sobre el total de observaciones. "
          "Métrica secundaria; puede ser engañosa en clases desbalanceadas.",
          r"\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}", None),
-        ("VALIDACIÓN CRUZADA (K = 10)", MENTA,
-         "El desempeño promedio en los 10 pliegues reduce la varianza asociada a una "
-         "única partición aleatoria. Garantiza que la proporción de clases se preserve "
-         "en cada pliegue.",
-         r"\bar{M} = \frac{1}{k} \sum_{i=1}^{k} M_i", None),
+        ("VALORES SHAP", MENTA,
+         "Distribuyen equitativamente la contribución de cada variable predictora "
+         "considerando todas las combinaciones posibles, con base en la teoría de "
+         "juegos cooperativos de Shapley. Implementado con TreeExplainer sobre "
+         "1.000 observaciones del conjunto de prueba para el modelo ganador.",
+         r"f(\mathbf{x}) = E[f(\mathbf{x})] + \sum_{j=1}^{p} \phi_j", None),
         ("TEST DE WILCOXON PAREADO", AMARILLO,
          "Prueba no paramétrica para comparar dos modelos cuando no puede asumirse "
-         "normalidad en las diferencias. Aplicado sobre los 10 pares de Recall₁ en "
-         "validación cruzada. Random Forest superior a Ridge (p = 0,002).",
+         "normalidad en las diferencias. Aplicado sobre los 10 pares de Recall₁ "
+         "obtenidos en validación cruzada estratificada (k = 10). Random Forest "
+         "superior a Ridge (p = 0,002).",
          r"W = \sum_{i:\,d_i > 0} r_i", None),
         ("BOOTSTRAP — IC 95%", CORAL,
          "Método del percentil sobre B = 1.000 remuestras con reemplazo del conjunto "
