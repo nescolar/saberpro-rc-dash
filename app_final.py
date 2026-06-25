@@ -3627,6 +3627,68 @@ def layout_modelos_analisis():
         ], style={"background": GRIS_CARD, "border": f"1px solid {BORDE}",
                   "borderRadius": "14px", "padding": "1.2rem", "marginBottom": "1.5rem"}),
         html.Div([
+            html.H4("Comparación estadística — Test de Wilcoxon pareado",
+                    style={"color": AZUL_OSCURO, "fontFamily": FONT,
+                           "fontSize": "1rem", "fontWeight": "700", "marginBottom": "0.4rem"}),
+            html.P("Prueba no paramétrica aplicada sobre los 10 pares de Recall₁ obtenidos "
+                   "en validación cruzada estratificada, comparando el modelo ganador frente "
+                   "al segundo mejor modelo (Ridge).",
+                   style={"fontFamily": FONT, "fontSize": "0.84rem", "color": GRIS_MUTED, "marginBottom": "1rem"}),
+            html.Div([
+                html.Div([
+                    html.Span("Random Forest (ganador)", style={"fontFamily": FONT, "fontSize": "0.8rem",
+                              "color": GRIS_MUTED, "display": "block"}),
+                    html.Span("Recall₁ = 0,7897 ± 0,0141", style={"fontFamily": FONT, "fontSize": "1.1rem",
+                              "fontWeight": "800", "color": AZUL_OSCURO}),
+                ], style={"flex": "1", "minWidth": "200px", "padding": "1rem",
+                          "background": f"linear-gradient(135deg, {AZUL_CLARO}, #eef3ff)",
+                          "borderRadius": "10px", "border": f"1px solid {AZUL_MEDIO}",
+                          "textAlign": "center"}),
+                html.Div([
+                    html.Span("Ridge (segundo mejor)", style={"fontFamily": FONT, "fontSize": "0.8rem",
+                              "color": GRIS_MUTED, "display": "block"}),
+                    html.Span("Recall₁ = 0,7358 ± 0,0150", style={"fontFamily": FONT, "fontSize": "1.1rem",
+                              "fontWeight": "800", "color": AZUL_OSCURO}),
+                ], style={"flex": "1", "minWidth": "200px", "padding": "1rem",
+                          "background": BLANCO, "borderRadius": "10px", "border": f"1px solid {BORDE}",
+                          "textAlign": "center"}),
+            ], style={"display": "flex", "gap": "1rem", "flexWrap": "wrap", "marginBottom": "1rem"}),
+            html.Div([
+                html.Div([
+                    html.Span("Estadístico W", style={"fontFamily": FONT, "fontSize": "0.8rem",
+                              "color": GRIS_MUTED, "display": "block"}),
+                    html.Span("0,0000", style={"fontFamily": FONT, "fontSize": "1.4rem",
+                              "fontWeight": "800", "color": AZUL_OSCURO}),
+                ], style={"flex": "1", "minWidth": "140px", "padding": "1rem",
+                          "background": BLANCO, "borderRadius": "10px", "border": f"1px solid {BORDE}",
+                          "textAlign": "center"}),
+                html.Div([
+                    html.Span("Valor p", style={"fontFamily": FONT, "fontSize": "0.8rem",
+                              "color": GRIS_MUTED, "display": "block"}),
+                    html.Span("0,0020", style={"fontFamily": FONT, "fontSize": "1.4rem",
+                              "fontWeight": "800", "color": AZUL_OSCURO}),
+                ], style={"flex": "1", "minWidth": "140px", "padding": "1rem",
+                          "background": BLANCO, "borderRadius": "10px", "border": f"1px solid {BORDE}",
+                          "textAlign": "center"}),
+            ], style={"display": "flex", "gap": "1rem", "flexWrap": "wrap", "marginBottom": "1rem"}),
+            html.P("Con p = 0,002 < 0,05, se rechaza la hipótesis nula de igualdad de medianas: "
+                   "la diferencia entre Random Forest y Ridge es estadísticamente significativa. "
+                   "Se puede declarar a Random Forest como modelo ganador con evidencia estadística.",
+                   style={"fontFamily": FONT, "fontSize": "0.86rem", "color": GRIS_TEXTO,
+                          "lineHeight": "1.7", "marginBottom": "0.8rem"}),
+            html.P([
+                html.Strong("Nota metodológica: ", style={"color": AZUL_OSCURO}),
+                "el test de Wilcoxon con 10 pares tiene potencia estadística limitada. "
+                "La ausencia de significancia frente a otros modelos no implicaría "
+                "equivalencia, solo que no habría evidencia suficiente para distinguirlos "
+                "con esta muestra de pliegues. El análisis se realizó únicamente frente a "
+                "Ridge, el segundo mejor modelo según Recall₁.",
+            ], style={"fontFamily": FONT, "fontSize": "0.8rem", "color": GRIS_MUTED,
+                      "lineHeight": "1.6", "marginBottom": "0",
+                      "borderTop": f"1px solid {BORDE}", "paddingTop": "0.8rem"}),
+        ], style={"background": GRIS_CARD, "border": f"1px solid {BORDE}",
+                  "borderRadius": "14px", "padding": "1.2rem", "marginBottom": "1.5rem"}),
+        html.Div([
             html.H4("Interpretabilidad — Valores SHAP (TreeExplainer)",
                     style={"color": AZUL_OSCURO, "fontFamily": FONT,
                            "fontSize": "1rem", "fontWeight": "700", "marginBottom": "0.4rem"}),
@@ -3656,7 +3718,7 @@ def layout_modelos_analisis():
         ], style={"background": GRIS_CARD, "border": f"1px solid {BORDE}",
                   "borderRadius": "14px", "padding": "1.2rem"}),
     ], titulo="Análisis de resultados",
-       subtitulo="Bootstrap, umbral óptimo e interpretabilidad SHAP")
+       subtitulo="Bootstrap, umbral óptimo, test de Wilcoxon e interpretabilidad SHAP")
 
 
 def layout_modelos():
