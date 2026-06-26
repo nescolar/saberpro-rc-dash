@@ -1437,6 +1437,12 @@ def grafico_distribucion(variable):
             automargin=True, row=1, col=1
         )
 
+        # Margen extra en el eje X del panel izquierdo para que la etiqueta
+        # "n=X.XXX" (textposition="outside") nunca quede cortada contra el
+        # borde del gráfico, sin importar la variable seleccionada.
+        max_total = totales["n"].max()
+        fig.update_xaxes(range=[0, max_total * 1.22], row=1, col=1)
+
         # Panel derecho — boxplots por categoría de la variable
         if col_puntaje:
             for i, cat in enumerate(orden):
