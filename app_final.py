@@ -1459,8 +1459,6 @@ def grafico_distribucion(variable):
             # quedan por debajo de ese punto de referencia.
             fig.add_hline(
                 y=142.86, line_dash="dot", line_color=GRIS_MUTED, line_width=1.3,
-                annotation_text="Media nacional: 142,86", annotation_position="top right",
-                annotation_font=dict(size=10, color=GRIS_MUTED, family=FONT),
                 row=1, col=2,
             )
         else:
@@ -3692,16 +3690,6 @@ def layout_modelos_analisis():
                    "Se puede declarar a Random Forest como modelo ganador con evidencia estadística.",
                    style={"fontFamily": FONT, "fontSize": "0.86rem", "color": GRIS_TEXTO,
                           "lineHeight": "1.7", "marginBottom": "0.8rem"}),
-            html.P([
-                html.Strong("Nota metodológica: ", style={"color": AZUL_OSCURO}),
-                "el test de Wilcoxon con 10 pares tiene potencia estadística limitada. "
-                "La ausencia de significancia frente a otros modelos no implicaría "
-                "equivalencia, solo que no habría evidencia suficiente para distinguirlos "
-                "con esta muestra de pliegues. El análisis se realizó únicamente frente a "
-                "Ridge, el segundo mejor modelo según Recall₁.",
-            ], style={"fontFamily": FONT, "fontSize": "0.8rem", "color": GRIS_MUTED,
-                      "lineHeight": "1.6", "marginBottom": "0",
-                      "borderTop": f"1px solid {BORDE}", "paddingTop": "0.8rem"}),
         ], style={"background": GRIS_CARD, "border": f"1px solid {BORDE}",
                   "borderRadius": "14px", "padding": "1.2rem", "marginBottom": "1.5rem"}),
         html.Div([
