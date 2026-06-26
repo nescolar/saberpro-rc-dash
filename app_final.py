@@ -1453,6 +1453,16 @@ def grafico_distribucion(variable):
                     boxmean=True, showlegend=False,
                     line_width=1.2,
                 ), row=1, col=2)
+
+            # Línea de referencia: media nacional (142,86), solo en el panel
+            # derecho. Permite identificar de un vistazo qué categorías
+            # quedan por debajo de ese punto de referencia.
+            fig.add_hline(
+                y=142.86, line_dash="dot", line_color=GRIS_MUTED, line_width=1.3,
+                annotation_text="Media nacional: 142,86", annotation_position="top right",
+                annotation_font=dict(size=10, color=GRIS_MUTED, family=FONT),
+                row=1, col=2,
+            )
         else:
             fig.add_annotation(
                 text="Puntaje RC no disponible", x=0.8, y=0.5,
